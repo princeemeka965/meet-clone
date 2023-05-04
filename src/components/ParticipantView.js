@@ -12,6 +12,7 @@ import NetworkIcon from "../icons/NetworkIcon";
 import SpeakerIcon from "../icons/SpeakerIcon";
 import { getQualityScore, nameTructed } from "../utils/common";
 import * as ReactDOM from "react-dom";
+import MicOnIcon from "../icons/Bottombar/MicOnIcon";
 
 export const CornerDisplayName = ({
   participantId,
@@ -48,12 +49,12 @@ export const CornerDisplayName = ({
   const analyzerSize = isXLDesktop
     ? 32
     : isLGDesktop
-    ? 28
-    : isTab
-    ? 24
-    : isMobile
-    ? 20
-    : 18;
+      ? 28
+      : isTab
+        ? 24
+        : isMobile
+          ? 20
+          : 18;
 
   const show = useMemo(() => mouseOver, [mouseOver]);
 
@@ -124,15 +125,15 @@ export const CornerDisplayName = ({
       audio: audioStats
         ? audioStats[0]?.packetsLost
           ? `${parseFloat(
-              (audioStats[0]?.packetsLost * 100) / audioStats[0]?.totalPackets
-            ).toFixed(2)}%`
+            (audioStats[0]?.packetsLost * 100) / audioStats[0]?.totalPackets
+          ).toFixed(2)}%`
           : "-"
         : "-",
       video: videoStats
         ? videoStats[0]?.packetsLost
           ? `${parseFloat(
-              (videoStats[0]?.packetsLost * 100) / videoStats[0]?.totalPackets
-            ).toFixed(2)}%`
+            (videoStats[0]?.packetsLost * 100) / videoStats[0]?.totalPackets
+          ).toFixed(2)}%`
           : "-"
         : "-",
     },
@@ -152,8 +153,8 @@ export const CornerDisplayName = ({
       audio: "-",
       video:
         videoStats &&
-        (videoStats[0]?.size?.framerate === null ||
-          videoStats[0]?.size?.framerate === undefined)
+          (videoStats[0]?.size?.framerate === null ||
+            videoStats[0]?.size?.framerate === undefined)
           ? "-"
           : `${videoStats ? videoStats[0]?.size?.framerate : "-"}`,
     },
@@ -178,9 +179,8 @@ export const CornerDisplayName = ({
         videoStats && !isLocal
           ? videoStats && videoStats[0]?.currentSpatialLayer === null
             ? "-"
-            : `S:${videoStats[0]?.currentSpatialLayer || 0} T:${
-                videoStats[0]?.currentTemporalLayer || 0
-              }`
+            : `S:${videoStats[0]?.currentSpatialLayer || 0} T:${videoStats[0]?.currentTemporalLayer || 0
+            }`
           : "-",
     },
     {
@@ -190,9 +190,8 @@ export const CornerDisplayName = ({
         videoStats && !isLocal
           ? videoStats && videoStats[0]?.preferredSpatialLayer === null
             ? "-"
-            : `S:${videoStats[0]?.preferredSpatialLayer || 0} T:${
-                videoStats[0]?.preferredTemporalLayer || 0
-              }`
+            : `S:${videoStats[0]?.preferredSpatialLayer || 0} T:${videoStats[0]?.preferredTemporalLayer || 0
+            }`
           : "-",
     },
   ];
@@ -226,23 +225,50 @@ export const CornerDisplayName = ({
           backgroundColor: "#00000066",
           transition: "all 200ms",
           transitionTimingFunction: "linear",
-          transform: `scale(${show ? 1 : 0})`,
+          transform: `scale(1)`,
+          minWidth: '85px',
         }}
       >
         {!micOn && !isPresenting ? (
-          <MicOffSmallIcon fillcolor="white" />
+          <>
+            <span className="flex flex-grow" style={{ marginLeft: '8px' }}>
+              <MicOffSmallIcon fillcolor="white" />
+            </span>
+            <p className="text-sm text-white flex justify-end ml-0.5 mr-2">
+              {isPresenting
+                ? isLocal
+                  ? `You are presenting`
+                  : `${nameTructed(displayName, 15)} is presenting`
+                : isLocal
+                  ? "You"
+                  : nameTructed(displayName, 26)}
+            </p>
+          </>
         ) : micOn && isActiveSpeaker ? (
-          <SpeakerIcon />
-        ) : null}
-        <p className="text-sm text-white ml-0.5">
-          {isPresenting
-            ? isLocal
-              ? `You are presenting`
-              : `${nameTructed(displayName, 15)} is presenting`
-            : isLocal
-            ? "You"
-            : nameTructed(displayName, 26)}
-        </p>
+          <>
+            <SpeakerIcon />
+            <p className="text-sm text-white flex justify-end ml-0.5">
+              {isPresenting
+                ? isLocal
+                  ? `You are presenting`
+                  : `${nameTructed(displayName, 15)} is presenting`
+                : isLocal
+                  ? "You"
+                  : nameTructed(displayName, 26)}
+            </p>
+          </>
+        ) : <>
+          <span className="flex flex-grow" style={{ marginLeft: '8px' }}><MicOnIcon /></span>
+          <p className="text-sm text-white flex justify-end ml-0.5 mr-2">
+            {isPresenting
+              ? isLocal
+                ? `You are presenting`
+                : `${nameTructed(displayName, 15)} is presenting`
+              : isLocal
+                ? "You"
+                : nameTructed(displayName, 26)}
+          </p>
+        </>}
       </div>
 
       {(webcamStream || micStream || screenShareStream) && (
@@ -263,8 +289,8 @@ export const CornerDisplayName = ({
                         score > 7
                           ? "#3BA55D"
                           : score > 4
-                          ? "#faa713"
-                          : "#FF5D5D",
+                            ? "#faa713"
+                            : "#FF5D5D",
                     }}
                     onClick={(e) => {
                       e.stopPropagation();
@@ -324,17 +350,16 @@ export const CornerDisplayName = ({
                                   score > 7
                                     ? "#3BA55D"
                                     : score > 4
-                                    ? "#faa713"
-                                    : "#FF5D5D",
+                                      ? "#faa713"
+                                      : "#FF5D5D",
                               }}
                             >
-                              <p className="text-sm text-white font-semibold">{`Quality Score : ${
-                                score > 7
-                                  ? "Good"
-                                  : score > 4
+                              <p className="text-sm text-white font-semibold">{`Quality Score : ${score > 7
+                                ? "Good"
+                                : score > 4
                                   ? "Average"
                                   : "Poor"
-                              }`}</p>
+                                }`}</p>
 
                               <button
                                 className="cursor-pointer text-white hover:bg-[#ffffff33] rounded-full px-1 text-center"

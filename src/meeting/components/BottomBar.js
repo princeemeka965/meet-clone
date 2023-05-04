@@ -415,22 +415,34 @@ export function BottomBar({
       setTooltipShow(false);
     };
 
+    const getAllWebcams = async () => {
+      const devices = await navigator.mediaDevices.enumerateDevices();
+      const webcams = devices.filter(
+        (d) =>
+          d.kind === "videoinput" &&
+          d.deviceId !== "default" &&
+          d.deviceId !== "communications"
+      );
+      return webcams[0].deviceId
+    }
+
     return (
       <>
         <OutlinedButton
           Icon={localWebcamOn ? WebcamOnIcon : WebcamOffIcon}
           onClick={async () => {
-            let track;
             if (!localWebcamOn) {
-              track = await createCameraVideoTrack({
+              const track = await createCameraVideoTrack({
                 optimizationMode: "motion",
-                encoderConfig: "h540p_w960p",
                 facingMode: "environment",
                 multiStream: false,
-                cameraId: selectWebcamDeviceId,
+                cameraId: getAllWebcams(),
               });
+              enableWebcam(track);
             }
-            mMeeting.toggleWebcam(track);
+            else {
+              disableWebcam();
+            }
           }}
           bgColor={localWebcamOn ? "bg-gray-750" : "bg-white"}
           borderColor={localWebcamOn && "#ffffff33"}

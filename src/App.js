@@ -10,7 +10,7 @@ const App = () => {
   const [meetingId, setMeetingId] = useState("");
   const [participantName, setParticipantName] = useState("");
   const [micOn, setMicOn] = useState(false);
-  const [webcamOn, setWebcamOn] = useState(true);
+  const [webcamOn, setWebcamOn] = useState(false);
   const [selectedMic, setSelectedMic] = useState({ id: null });
   const [selectedWebcam, setSelectedWebcam] = useState({ id: null });
   const [selectWebcamDeviceId, setSelectWebcamDeviceId] = useState(

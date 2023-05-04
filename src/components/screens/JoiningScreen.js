@@ -178,16 +178,19 @@ export function JoiningScreen({
         },
       };
 
-      const stream = await navigator.mediaDevices.getUserMedia(
-        videoConstraints
-      );
+      const deviceId = webcams[0].deviceId;
+
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { deviceId }
+      });
       const videoTracks = stream.getVideoTracks();
 
       const videoTrack = videoTracks.length ? videoTracks[0] : null;
       setVideoTrack(videoTrack);
+
       if (firstTime) {
         setSelectedWebcam({
-          id: videoTrack?.getSettings()?.deviceId,
+          id: webcams[0].deviceId,
         });
       }
     }
